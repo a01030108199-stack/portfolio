@@ -29,5 +29,15 @@ const PROJECTS_DATA = [
         image: "assets/images/project3.png",
         demoUrl: "#",
         githubUrl: "https://github.com/AkramSaad"
+    },
+    {
+        id: 4,
+        title: "نظام إدارة وعقود المقاولات المالي",
+        description: "تطبيق ويب متكامل (PWA) لإدارة الحسابات المالية للمشاريع والمقاولات، يشمل متابعة مستحقات الموردين ومقاولي الباطن، كشوف مرتبات الموظفين، وإدارة الموازنات التشغيلية مع واجهات تفاعلية تدعم العمل دون اتصال بالإنترنت.",
+        category: "data",
+        tags: ["HTML5", "CSS3", "JavaScript", "PWA", "Financial Dashboards"],
+        image: "assets/images/project4.png",
+        demoUrl: "#",
+        githubUrl: "https://github.com/AkramSaad"
     }
 ];
