@@ -362,63 +362,90 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function loadGuestbookAndStats() {
+    function getLocalComments() {
+        try {
+            const local = localStorage.getItem('portfolio_local_comments');
+            return local ? JSON.parse(local) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveLocalComment(entry) {
+        try {
+            const local = getLocalComments();
+            local.unshift(entry);
+            localStorage.setItem('portfolio_local_comments', JSON.stringify(local.slice(0, 15)));
+        } catch (e) {
+            console.error('Error saving local comment:', e);
+        }
+    }
+
+    function loadGuestbook() {
         fetch(dbUrl)
             .then(res => {
                 if (!res.ok) {
                     if (res.status === 404) {
-                        // Key does not exist yet: return default structure to the next .then()
-                        return { comments: defaultComments, views: 20 };
+                        return { comments: defaultComments };
                     }
                     throw new Error('Failed to fetch DB');
                 }
                 return res.json();
             })
             .then(resData => {
-                // 1. Render Comments
                 let comments = defaultComments;
                 if (resData && Array.isArray(resData.comments)) {
                     comments = resData.comments;
                 }
-                renderGuestbook(comments);
-
-                // 2. Handle Visitor Counter (initial value starts at 20)
-                let currentViews = 20;
-                if (resData && typeof resData.views === 'number') {
-                    currentViews = resData.views;
-                }
-
-                if (visitorCountEl) {
-                    const hasVisited = localStorage.getItem('has_visited_portfolio');
-                    if (!hasVisited) {
-                        // First-time visit: increment locally and update in DB
-                        currentViews += 1;
-                        visitorCountEl.textContent = currentViews.toLocaleString();
-                        
-                        const payload = {
-                            comments: comments,
-                            views: currentViews
-                        };
-                        fetch(dbUrl, {
-                            method: 'POST',
-                            body: JSON.stringify(payload)
-                        })
-                        .then(() => {
-                            localStorage.setItem('has_visited_portfolio', 'true');
-                        })
-                        .catch(err => console.error('Error saving views to DB:', err));
-                    } else {
-                        // Return visitor: just show the count
-                        visitorCountEl.textContent = currentViews.toLocaleString();
+                const localComments = getLocalComments();
+                const mergedComments = [...localComments];
+                
+                comments.forEach(serverComment => {
+                    const exists = mergedComments.some(local => 
+                        local.name === serverComment.name && 
+                        local.message === serverComment.message
+                    );
+                    if (!exists) {
+                        mergedComments.push(serverComment);
                     }
+                });
+                
+                renderGuestbook(mergedComments.slice(0, 15));
+            })
+            .catch(err => {
+                console.warn('Error loading guestbook from DB, falling back to local/default:', err);
+                const localComments = getLocalComments();
+                const mergedComments = [...localComments, ...defaultComments];
+                renderGuestbook(mergedComments.slice(0, 15));
+            });
+    }
+
+    // 11. Dynamic Visitor Counter API integration (Using Abacus API to bypass adblockers & work without registration)
+    function loadVisitorCounter() {
+        if (!visitorCountEl) return;
+        const hasVisited = localStorage.getItem('has_visited_portfolio');
+        const endpoint = hasVisited ? 'get' : 'hit';
+        
+        fetch(`https://abacus.jasoncameron.dev/${endpoint}/akramsaad/portfolio`)
+            .then(res => {
+                if (!res.ok) throw new Error('Counter API error');
+                return res.json();
+            })
+            .then(data => {
+                if (data && typeof data.value === 'number') {
+                    // Start from 65+ to reflect realistic previous views
+                    const totalViews = data.value + 65;
+                    visitorCountEl.textContent = totalViews.toLocaleString();
+                    if (!hasVisited) {
+                        localStorage.setItem('has_visited_portfolio', 'true');
+                    }
+                } else {
+                    visitorCountEl.textContent = 'متصل';
                 }
             })
             .catch(err => {
-                console.warn('Error loading stats/guestbook, falling back:', err);
-                renderGuestbook(defaultComments);
-                if (visitorCountEl) {
-                    visitorCountEl.textContent = 'متصل';
-                }
+                console.warn('Visitor counter API failed:', err);
+                visitorCountEl.textContent = 'متصل';
             });
     }
 
@@ -438,6 +465,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 date: new Date().toISOString().split('T')[0]
             };
 
+            // Save locally first
+            saveLocalComment(newEntry);
+
             // Loading state
             const originalBtnHTML = submitBtn.innerHTML;
             submitBtn.disabled = true;
@@ -448,7 +478,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(res => {
                     if (!res.ok) {
                         if (res.status === 404) {
-                            return { comments: defaultComments, views: 20 };
+                            return { comments: defaultComments };
                         }
                         throw new Error('Fetch failed');
                     }
@@ -456,37 +486,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .then(resData => {
                     let currentEntries = (resData && Array.isArray(resData.comments)) ? resData.comments : defaultComments;
-                    let currentViews = (resData && typeof resData.views === 'number') ? resData.views : 20;
-
-                    // Append new entry to the top
                     currentEntries.unshift(newEntry);
-                    // Keep only last 15 entries for size safety
                     if (currentEntries.length > 15) {
                         currentEntries = currentEntries.slice(0, 15);
                     }
                     
                     const payload = {
-                        comments: currentEntries,
-                        views: currentViews
+                        comments: currentEntries
                     };
 
-                    // Save to DB
                     return fetch(dbUrl, {
                         method: 'POST',
                         body: JSON.stringify(payload)
                     }).then(() => currentEntries);
                 })
                 .then(updatedEntries => {
-                    // Success render
-                    renderGuestbook(updatedEntries);
-                    // Reset inputs
+                    loadGuestbook();
                     nameInput.value = '';
                     titleInput.value = '';
                     messageInput.value = '';
                 })
                 .catch(err => {
-                    console.error('Error submitting comment:', err);
-                    alert('عذراً، حدث خطأ أثناء الاتصال بالخادم. يرجى التأكد من تفعيل قاعدة البيانات أولاً.');
+                    console.warn('Error submitting comment to DB, showing locally:', err);
+                    loadGuestbook();
+                    nameInput.value = '';
+                    titleInput.value = '';
+                    messageInput.value = '';
                 })
                 .finally(() => {
                     submitBtn.disabled = false;
@@ -496,5 +521,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Load guestbook and stats on startup
-    loadGuestbookAndStats();
+    loadGuestbook();
+    loadVisitorCounter();
 });
