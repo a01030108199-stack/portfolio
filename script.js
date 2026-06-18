@@ -246,20 +246,40 @@ document.addEventListener('DOMContentLoaded', () => {
     // 8. Dynamic Visitor Counter API integration
     const visitorCountEl = document.getElementById('visitor-count');
     if (visitorCountEl) {
-        // We use counterapi.dev for free, live, zero-setup visit tracking
-        fetch('https://api.counterapi.dev/v1/akramsaad/portfolio/up')
-            .then(response => response.json())
-            .then(data => {
-                if (data && typeof data.count === 'number') {
-                    visitorCountEl.textContent = data.count.toLocaleString();
-                } else {
-                    visitorCountEl.textContent = '1';
-                }
-            })
-            .catch(err => {
-                console.error('Error fetching visitor count:', err);
-                visitorCountEl.textContent = 'متصل';
-            });
+        const hasVisited = localStorage.getItem('has_visited_portfolio');
+        
+        if (!hasVisited) {
+            // First time visit in this browser: increment the counter
+            fetch('https://api.counterapi.dev/v1/akramsaad/portfolio/up')
+                .then(response => response.json())
+                .then(data => {
+                    if (data && typeof data.count === 'number') {
+                        visitorCountEl.textContent = data.count.toLocaleString();
+                        localStorage.setItem('has_visited_portfolio', 'true');
+                    } else {
+                        visitorCountEl.textContent = '1';
+                    }
+                })
+                .catch(err => {
+                    console.error('Error fetching visitor count:', err);
+                    visitorCountEl.textContent = 'متصل';
+                });
+        } else {
+            // Subsequent visits: only read the current count without incrementing
+            fetch('https://api.counterapi.dev/v1/akramsaad/portfolio')
+                .then(response => response.json())
+                .then(data => {
+                    if (data && typeof data.count === 'number') {
+                        visitorCountEl.textContent = data.count.toLocaleString();
+                    } else {
+                        visitorCountEl.textContent = '1';
+                    }
+                })
+                .catch(err => {
+                    console.error('Error fetching visitor count:', err);
+                    visitorCountEl.textContent = 'متصل';
+                });
+        }
     }
 
     // 9. IP Geolocation Country Welcome Banner
