@@ -243,44 +243,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 8. Dynamic Visitor Counter API integration
+    // 8. Dynamic Visitor Counter API integration (Using Restful-API database to bypass adblockers)
     const visitorCountEl = document.getElementById('visitor-count');
-    if (visitorCountEl) {
-        const hasVisited = localStorage.getItem('has_visited_portfolio');
-        
-        if (!hasVisited) {
-            // First time visit in this browser: increment the counter
-            fetch('https://api.counterapi.dev/v1/akramsaad/portfolio/up')
-                .then(response => response.json())
-                .then(data => {
-                    if (data && typeof data.count === 'number') {
-                        visitorCountEl.textContent = data.count.toLocaleString();
-                        localStorage.setItem('has_visited_portfolio', 'true');
-                    } else {
-                        visitorCountEl.textContent = '1';
-                    }
-                })
-                .catch(err => {
-                    console.error('Error fetching visitor count:', err);
-                    visitorCountEl.textContent = 'متصل';
-                });
-        } else {
-            // Subsequent visits: only read the current count without incrementing
-            fetch('https://api.counterapi.dev/v1/akramsaad/portfolio')
-                .then(response => response.json())
-                .then(data => {
-                    if (data && typeof data.count === 'number') {
-                        visitorCountEl.textContent = data.count.toLocaleString();
-                    } else {
-                        visitorCountEl.textContent = '1';
-                    }
-                })
-                .catch(err => {
-                    console.error('Error fetching visitor count:', err);
-                    visitorCountEl.textContent = 'متصل';
-                });
-        }
-    }
+    // We will initialize the counter from this unified DB in loadGuestbookAndStats() below.
 
     // 9. IP Geolocation Country Welcome Banner
     const welcomeBanner = document.getElementById('welcome-banner');
@@ -347,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return countries[code.toUpperCase()];
     }
 
-    // 10. Serverless Guestbook System
+    // 10. Serverless Guestbook & Visitor Counter System
     const guestbookForm = document.getElementById('guestbook-form');
     const guestbookList = document.getElementById('guestbook-list');
     const dbUrl = 'https://api.restful-api.dev/objects/ff8081819d82fab6019ed961aa5b2cac';
@@ -397,38 +362,62 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function loadGuestbook() {
+    function loadGuestbookAndStats() {
         fetch(dbUrl)
             .then(res => {
-                if (!res.ok) throw new Error('Failed to fetch');
+                if (!res.ok) throw new Error('Failed to fetch DB');
                 return res.json();
             })
             .then(resData => {
+                // 1. Render Comments
+                let comments = defaultComments;
                 if (resData && resData.data && Array.isArray(resData.data.comments)) {
-                    renderGuestbook(resData.data.comments);
-                } else {
-                    renderGuestbook(defaultComments);
+                    comments = resData.data.comments;
+                }
+                renderGuestbook(comments);
+
+                // 2. Handle Visitor Counter (initial value starts at 20)
+                let currentViews = 20;
+                if (resData && resData.data && typeof resData.data.views === 'number') {
+                    currentViews = resData.data.views;
+                }
+
+                if (visitorCountEl) {
+                    const hasVisited = localStorage.getItem('has_visited_portfolio');
+                    if (!hasVisited) {
+                        // First-time visit: increment locally and update in DB
+                        currentViews += 1;
+                        visitorCountEl.textContent = currentViews.toLocaleString();
+                        
+                        const payload = {
+                            name: "AkramSaadGuestbook",
+                            data: {
+                                comments: comments,
+                                views: currentViews
+                            }
+                        };
+                        fetch(dbUrl, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        })
+                        .then(() => {
+                            localStorage.setItem('has_visited_portfolio', 'true');
+                        })
+                        .catch(err => console.error('Error saving views to DB:', err));
+                    } else {
+                        // Return visitor: just show the count
+                        visitorCountEl.textContent = currentViews.toLocaleString();
+                    }
                 }
             })
             .catch(err => {
-                console.warn('Error fetching guestbook, falling back to offline defaults:', err);
+                console.warn('Error loading stats/guestbook, falling back:', err);
                 renderGuestbook(defaultComments);
+                if (visitorCountEl) {
+                    visitorCountEl.textContent = 'متصل';
+                }
             });
-    }
-
-    function saveGuestbook(entries) {
-        const payload = {
-            name: "AkramSaadGuestbook",
-            data: {
-                comments: entries
-            }
-        };
-        fetch(dbUrl, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        })
-        .catch(err => console.error('Error saving to guestbook DB:', err));
     }
 
     if (guestbookForm) {
@@ -460,6 +449,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .then(resData => {
                     let currentEntries = (resData && resData.data && Array.isArray(resData.data.comments)) ? resData.data.comments : defaultComments;
+                    let currentViews = (resData && resData.data && typeof resData.data.views === 'number') ? resData.data.views : 20;
+
                     // Append new entry to the top
                     currentEntries.unshift(newEntry);
                     // Keep only last 15 entries for size safety
@@ -470,7 +461,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const payload = {
                         name: "AkramSaadGuestbook",
                         data: {
-                            comments: currentEntries
+                            comments: currentEntries,
+                            views: currentViews
                         }
                     };
 
@@ -500,6 +492,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Load Guestbook on startup
-    loadGuestbook();
+    // Load guestbook and stats on startup
+    loadGuestbookAndStats();
 });
