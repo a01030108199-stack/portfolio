@@ -1368,8 +1368,11 @@ textarea.form-control {
 }
 
 .lightbox-img {
-    max-width: 90%;
+    max-width: 95%;
     max-height: 85vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
     transform: scale(0.9);
