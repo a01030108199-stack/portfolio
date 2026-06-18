@@ -554,6 +554,53 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeModal();
             }
         });
+
+        // Setup Lightbox functionality for certificate items
+        const certItems = certsModal.querySelectorAll('.certificate-item');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const closeLightboxBtn = lightbox ? lightbox.querySelector('.close-lightbox') : null;
+
+        if (lightbox && lightboxImg) {
+            certItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const imgUrl = item.getAttribute('data-image');
+                    if (imgUrl) {
+                        lightboxImg.src = imgUrl;
+                        lightbox.classList.add('active');
+                        // Add a small delay for opacity transition
+                        setTimeout(() => {
+                            lightbox.style.opacity = '1';
+                        }, 50);
+                    }
+                });
+            });
+
+            const closeLightbox = () => {
+                lightbox.style.opacity = '0';
+                setTimeout(() => {
+                    lightbox.classList.remove('active');
+                    lightboxImg.src = '';
+                }, 300);
+            };
+
+            if (closeLightboxBtn) {
+                closeLightboxBtn.addEventListener('click', closeLightbox);
+            }
+
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) {
+                    closeLightbox();
+                }
+            });
+
+            // ESC closes lightbox too
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                    closeLightbox();
+                }
+            });
+        }
     }
 
     // Load guestbook and stats on startup
