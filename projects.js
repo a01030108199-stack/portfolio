@@ -37,7 +37,7 @@ const PROJECTS_DATA = [
         category: "data",
         tags: ["HTML5", "CSS3", "JavaScript", "PWA", "Financial Dashboards"],
         image: "assets/images/project4.png",
-        demoUrl: "#",
+        demoUrl: "https://akram-contracting.netlify.app",
         githubUrl: "https://github.com/AkramSaad"
     },
     {
