@@ -66,6 +66,11 @@
                     <i class="fas fa-download"></i>
                     <span>السيرة الذاتية</span>
                 </a>
+                <!-- Certificates Button -->
+                <button class="btn" id="certificates-btn" title="عرض الشهادات والاعتمادات">
+                    <i class="fas fa-award"></i>
+                    <span>الشهادات</span>
+                </button>
                 <!-- Mobile Hamburger Menu -->
                 <div class="hamburger" id="hamburger">
                     <span></span>
@@ -384,6 +389,61 @@
     <div class="toast-msg" id="toast">
         <i class="fas fa-check-circle"></i>
         <span>شكراً لتواصلك! تم إرسال رسالتك بنجاح وسأرد عليك قريباً.</span>
+    </div>
+
+    <!-- Certificates Modal -->
+    <div id="certificates-modal" class="modal">
+        <div class="modal-content glass">
+            <span class="close-modal">&times;</span>
+            <h2 class="modal-title">🏆 الشهادات العلمية والمهنية</h2>
+            <div class="certificates-list">
+                <!-- Academic -->
+                <div class="certificate-item">
+                    <div class="cert-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <div class="cert-info">
+                        <h3>تمهيدي الدكتوراه في المحاسبة والمراجعة</h3>
+                        <p>جامعة الزقازيق - كلية التجارة</p>
+                    </div>
+                </div>
+                <div class="certificate-item">
+                    <div class="cert-icon"><i class="fas fa-user-graduate"></i></div>
+                    <div class="cert-info">
+                        <h3>درجة الماجستير في المحاسبة والمراجعة (2024)</h3>
+                        <p>جامعة الزقازيق - كلية التجارة</p>
+                    </div>
+                </div>
+                <!-- Data / Tech -->
+                <div class="certificate-item">
+                    <div class="cert-icon"><i class="fas fa-chart-bar"></i></div>
+                    <div class="cert-info">
+                        <h3>تحليل البيانات المتقدم باستخدام Power BI</h3>
+                        <p>أدوات ذكاء الأعمال، لغة DAX، ونمذجة البيانات التفاعلية</p>
+                    </div>
+                </div>
+                <div class="certificate-item">
+                    <div class="cert-icon"><i class="fas fa-database"></i></div>
+                    <div class="cert-info">
+                        <h3>إدارة قواعد البيانات والاستعلام المتقدم SQL</h3>
+                        <p>تصميم الاستعلامات، التعامل مع الجداول الضخمة، والتحليل الهيكلي</p>
+                    </div>
+                </div>
+                <div class="certificate-item">
+                    <div class="cert-icon"><i class="fab fa-python"></i></div>
+                    <div class="cert-info">
+                        <h3>تحليل البيانات والتحليل المالي باستخدام Python</h3>
+                        <p>بناء النماذج المالية وأتمتة العمليات اليومية وتطوير لوحات Streamlit</p>
+                    </div>
+                </div>
+                <!-- Accounting -->
+                <div class="certificate-item">
+                    <div class="cert-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                    <div class="cert-info">
+                        <h3>تطبيق معايير التقارير المالية الدولية (IFRS)</h3>
+                        <p>إعداد القوائم المالية الموحدة والرقابة المالية والمطابقات البنكية</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Scripts -->

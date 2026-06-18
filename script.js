@@ -520,6 +520,42 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 12. Certificates Modal Logic
+    const certsBtn = document.getElementById('certificates-btn');
+    const certsModal = document.getElementById('certificates-modal');
+    const closeModalBtn = certsModal ? certsModal.querySelector('.close-modal') : null;
+
+    if (certsBtn && certsModal) {
+        certsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            certsModal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // prevent scrolling behind modal
+        });
+
+        const closeModal = () => {
+            certsModal.classList.remove('active');
+            document.body.style.overflow = '';
+        };
+
+        if (closeModalBtn) {
+            closeModalBtn.addEventListener('click', closeModal);
+        }
+
+        // Close when clicking outside of modal-content
+        certsModal.addEventListener('click', (e) => {
+            if (e.target === certsModal) {
+                closeModal();
+            }
+        });
+
+        // Close on ESC keypress
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && certsModal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+    }
+
     // Load guestbook and stats on startup
     loadGuestbook();
     loadVisitorCounter();
