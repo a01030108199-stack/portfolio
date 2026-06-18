@@ -273,9 +273,10 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(res => res.json())
             .then(data => {
                 if (data && data.country_code && data.country_name) {
-                    const flag = getFlagEmoji(data.country_code);
+                    const countryCode = data.country_code.toLowerCase();
                     const countryArabicName = getCountryArabic(data.country_code) || data.country_name;
-                    welcomeFlag.textContent = flag;
+                    // استخدام صورة علم عالية الجودة بدلاً من إيموجي اليونيكود لحل مشكلة عدم ظهوره في ويندوز
+                    welcomeFlag.innerHTML = `<img src="https://flagcdn.com/w20/${countryCode}.png" style="width: 20px; height: auto; border-radius: 3px; vertical-align: middle; display: inline-block; box-shadow: 0 1px 3px rgba(0,0,0,0.2);" alt="${data.country_name}">`;
                     welcomeText.innerHTML = `أهلاً بك! نسعد بزيارتك الكريمة من <strong>${countryArabicName}</strong> 💖`;
                     welcomeBanner.style.display = 'inline-flex';
                 }
