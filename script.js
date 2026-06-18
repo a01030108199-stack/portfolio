@@ -315,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 10. Serverless Guestbook & Visitor Counter System
     const guestbookForm = document.getElementById('guestbook-form');
     const guestbookList = document.getElementById('guestbook-list');
-    const dbUrl = 'https://api.restful-api.dev/objects/ff8081819d82fab6019ed961aa5b2cac';
+    const dbUrl = 'https://kvdb.io/9mLDhcgcrAL6BaNQ6Jpta4/portfolio_data';
 
     // Default mock comments to make the guestbook look full and premium from day one
     const defaultComments = [
@@ -365,21 +365,27 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadGuestbookAndStats() {
         fetch(dbUrl)
             .then(res => {
-                if (!res.ok) throw new Error('Failed to fetch DB');
+                if (!res.ok) {
+                    if (res.status === 404) {
+                        // Key does not exist yet: return default structure to the next .then()
+                        return { comments: defaultComments, views: 20 };
+                    }
+                    throw new Error('Failed to fetch DB');
+                }
                 return res.json();
             })
             .then(resData => {
                 // 1. Render Comments
                 let comments = defaultComments;
-                if (resData && resData.data && Array.isArray(resData.data.comments)) {
-                    comments = resData.data.comments;
+                if (resData && Array.isArray(resData.comments)) {
+                    comments = resData.comments;
                 }
                 renderGuestbook(comments);
 
                 // 2. Handle Visitor Counter (initial value starts at 20)
                 let currentViews = 20;
-                if (resData && resData.data && typeof resData.data.views === 'number') {
-                    currentViews = resData.data.views;
+                if (resData && typeof resData.views === 'number') {
+                    currentViews = resData.views;
                 }
 
                 if (visitorCountEl) {
@@ -390,15 +396,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         visitorCountEl.textContent = currentViews.toLocaleString();
                         
                         const payload = {
-                            name: "AkramSaadGuestbook",
-                            data: {
-                                comments: comments,
-                                views: currentViews
-                            }
+                            comments: comments,
+                            views: currentViews
                         };
                         fetch(dbUrl, {
-                            method: 'PUT',
-                            headers: { 'Content-Type': 'application/json' },
+                            method: 'POST',
                             body: JSON.stringify(payload)
                         })
                         .then(() => {
@@ -444,12 +446,17 @@ document.addEventListener('DOMContentLoaded', () => {
             // Fetch current DB, append new comment, save, and reload
             fetch(dbUrl)
                 .then(res => {
-                    if (!res.ok) throw new Error('Fetch failed');
+                    if (!res.ok) {
+                        if (res.status === 404) {
+                            return { comments: defaultComments, views: 20 };
+                        }
+                        throw new Error('Fetch failed');
+                    }
                     return res.json();
                 })
                 .then(resData => {
-                    let currentEntries = (resData && resData.data && Array.isArray(resData.data.comments)) ? resData.data.comments : defaultComments;
-                    let currentViews = (resData && resData.data && typeof resData.data.views === 'number') ? resData.data.views : 20;
+                    let currentEntries = (resData && Array.isArray(resData.comments)) ? resData.comments : defaultComments;
+                    let currentViews = (resData && typeof resData.views === 'number') ? resData.views : 20;
 
                     // Append new entry to the top
                     currentEntries.unshift(newEntry);
@@ -459,17 +466,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     
                     const payload = {
-                        name: "AkramSaadGuestbook",
-                        data: {
-                            comments: currentEntries,
-                            views: currentViews
-                        }
+                        comments: currentEntries,
+                        views: currentViews
                     };
 
                     // Save to DB
                     return fetch(dbUrl, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
+                        method: 'POST',
                         body: JSON.stringify(payload)
                     }).then(() => currentEntries);
                 })
@@ -483,7 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .catch(err => {
                     console.error('Error submitting comment:', err);
-                    alert('عذراً، حدث خطأ أثناء الاتصال بالخادم. يرجى المحاولة لاحقاً.');
+                    alert('عذراً، حدث خطأ أثناء الاتصال بالخادم. يرجى التأكد من تفعيل قاعدة البيانات أولاً.');
                 })
                 .finally(() => {
                     submitBtn.disabled = false;
