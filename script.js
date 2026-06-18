@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             card.innerHTML = `
                 <div class="project-img-wrapper">
-                    <img src="${project.image}" alt="${project.title}" class="project-img" onerror="this.src='https://placehold.co/600x400/120d24/ffffff?text=${encodeURIComponent(project.title)}'">
+                    <img src="${project.image}" alt="${project.title}" class="project-img" onerror="this.src='https://placehold.co/600x400/120d24/ffffff?text=Project+Showcase'">
                     <div class="project-overlay">
                         <a href="${project.githubUrl}" target="_blank" class="btn-icon" title="كود المصدر"><i class="fab fa-github"></i></a>
                         <a href="${project.demoUrl}" class="btn-icon" title="معاينة حية"><i class="fas fa-external-link-alt"></i></a>
