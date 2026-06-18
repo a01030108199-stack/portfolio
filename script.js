@@ -247,11 +247,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const visitorCountEl = document.getElementById('visitor-count');
     if (visitorCountEl) {
         // We use counterapi.dev for free, live, zero-setup visit tracking
-        fetch('https://api.counterapi.dev/v1/akramsaad/portfolio/increment')
+        fetch('https://api.counterapi.dev/v1/akramsaad/portfolio/up')
             .then(response => response.json())
             .then(data => {
-                if (data && data.value) {
-                    visitorCountEl.textContent = data.value.toLocaleString();
+                if (data && typeof data.count === 'number') {
+                    visitorCountEl.textContent = data.count.toLocaleString();
                 } else {
                     visitorCountEl.textContent = '1';
                 }
