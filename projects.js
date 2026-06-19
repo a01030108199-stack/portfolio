@@ -16,7 +16,7 @@ const PROJECTS_DATA = [
         description: "لوحة تحكم تفاعلية متكاملة مصممة بـ Power BI لصوامع طامية لحوكمة حركة الأقماح المحلية والتدفقات النقدية، وتتبع نسب التوريد وحسابات الموردين بدقة متناهية ودعم اتخاذ القرارات الاستراتيجية للإدارة العليا.",
         category: "data",
         tags: ["Power BI", "Power Query", "Data Modeling", "Financial Governance"],
-        image: "assets/images/project2.jpg",
+        image: "project2.jpg",
         demoUrl: "https://app.powerbi.com/groups/dfe8bf14-542b-4a06-8636-e97e0c6e5ab5/reports/6a6cd4b7-dc05-41ef-8127-57012ea580e3/e07aad9ed956d75af2c8?experience=power-bi",
         githubUrl: "https://github.com/AkramSaad"
     },
