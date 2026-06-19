@@ -17,8 +17,13 @@ const PROJECTS_DATA = [
         category: "data",
         tags: ["Power BI", "Power Query", "Data Modeling", "Financial Governance"],
         image: "project2.jpg",
-        demoUrl: "https://app.powerbi.com/groups/dfe8bf14-542b-4a06-8636-e97e0c6e5ab5/reports/6a6cd4b7-dc05-41ef-8127-57012ea580e3/e07aad9ed956d75af2c8?experience=power-bi",
-        githubUrl: "https://github.com/AkramSaad"
+        demoUrl: "#",
+        githubUrl: "https://github.com/AkramSaad",
+        gallery: [
+            { src: "project2.jpg", caption: "لوحة التحكم التفاعلية لحوكمة حركة الأقماح المحلية" },
+            { src: "assets/images/project2.png", caption: "تتبع نسب التوريد والتدفقات النقدية بدقة متناهية" },
+            { src: "assets/images/photo_2025-11-20_19-31-15.jpg", caption: "معاينة لوحة تحكم حوكمة صوامع طامية على جهاز الحاسوب" }
+        ]
     },
     {
         id: 3,

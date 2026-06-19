@@ -84,12 +84,18 @@ document.addEventListener('DOMContentLoaded', () => {
             // Create tags list HTML
             const tagsHTML = project.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('');
             
+            // Check if project has a gallery array
+            const isGallery = project.gallery && project.gallery.length > 0;
+            const demoBtnHTML = isGallery 
+                ? `<a href="#" class="btn-icon project-gallery-trigger" data-project-id="${project.id}" title="عرض صور المشروع"><i class="fas fa-images"></i></a>`
+                : `<a href="${project.demoUrl}" target="_blank" class="btn-icon" title="معاينة حية"><i class="fas fa-external-link-alt"></i></a>`;
+            
             card.innerHTML = `
                 <div class="project-img-wrapper">
                     <img src="${project.image}" alt="${project.title}" class="project-img" onerror="this.src='https://placehold.co/600x400/120d24/ffffff?text=Project+Showcase'">
                     <div class="project-overlay">
                         <a href="${project.githubUrl}" target="_blank" class="btn-icon" title="كود المصدر"><i class="fab fa-github"></i></a>
-                        <a href="${project.demoUrl}" class="btn-icon" title="معاينة حية"><i class="fas fa-external-link-alt"></i></a>
+                        ${demoBtnHTML}
                     </div>
                 </div>
                 <div class="project-content">
@@ -520,7 +526,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 12. Certificates Modal Logic
+    // 12. Certificates Modal Logic & General Lightbox Gallery
     const certsBtn = document.getElementById('certificates-btn');
     const certsModal = document.getElementById('certificates-modal');
     const closeModalBtn = certsModal ? certsModal.querySelector('.close-modal') : null;
@@ -554,53 +560,161 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeModal();
             }
         });
+    }
 
-        // Setup Lightbox functionality for certificate items
-        const certItems = certsModal.querySelectorAll('.certificate-item');
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightbox-img');
-        const closeLightboxBtn = lightbox ? lightbox.querySelector('.close-lightbox') : null;
+    // General Lightbox Gallery Implementation
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeLightboxBtn = lightbox ? lightbox.querySelector('.close-lightbox') : null;
+    const lightboxPrev = document.getElementById('lightbox-prev');
+    const lightboxNext = document.getElementById('lightbox-next');
+    const lightboxCaption = document.getElementById('lightbox-caption');
 
-        if (lightbox && lightboxImg) {
+    let currentGallery = [];
+    let currentGalleryIndex = 0;
+
+    function showLightboxImage(index) {
+        if (index < 0 || index >= currentGallery.length) return;
+        currentGalleryIndex = index;
+        const item = currentGallery[currentGalleryIndex];
+        
+        // Add a smooth fade-out and fade-in effect
+        if (lightboxImg) {
+            lightboxImg.style.opacity = '0';
+            lightboxImg.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                if (typeof item === 'string') {
+                    lightboxImg.src = item;
+                    if (lightboxCaption) lightboxCaption.style.display = 'none';
+                } else if (item && typeof item === 'object') {
+                    lightboxImg.src = item.src;
+                    if (lightboxCaption) {
+                        lightboxCaption.textContent = item.caption || '';
+                        lightboxCaption.style.display = 'block';
+                    }
+                }
+                
+                lightboxImg.style.opacity = '1';
+                lightboxImg.style.transform = 'scale(1)';
+            }, 150);
+        }
+
+        // Toggle navigation buttons visibility based on gallery size
+        if (currentGallery.length > 1) {
+            if (lightboxPrev) lightboxPrev.style.display = 'flex';
+            if (lightboxNext) lightboxNext.style.display = 'flex';
+        } else {
+            if (lightboxPrev) lightboxPrev.style.display = 'none';
+            if (lightboxNext) lightboxNext.style.display = 'none';
+            if (lightboxCaption && typeof item === 'string') {
+                lightboxCaption.style.display = 'none';
+            }
+        }
+    }
+
+    const openLightbox = () => {
+        if (lightbox) {
+            lightbox.classList.add('active');
+            setTimeout(() => {
+                lightbox.style.opacity = '1';
+            }, 50);
+        }
+    };
+
+    const closeLightbox = () => {
+        if (lightbox) {
+            lightbox.style.opacity = '0';
+            setTimeout(() => {
+                lightbox.classList.remove('active');
+                if (lightboxImg) lightboxImg.src = '';
+                if (lightboxCaption) lightboxCaption.textContent = '';
+            }, 300);
+        }
+    };
+
+    if (lightbox && lightboxImg) {
+        // Setup click handler for certificate items in certificates modal
+        if (certsModal) {
+            const certItems = certsModal.querySelectorAll('.certificate-item');
             certItems.forEach(item => {
                 item.addEventListener('click', () => {
                     const imgUrl = item.getAttribute('data-image');
                     if (imgUrl) {
-                        lightboxImg.src = imgUrl;
-                        lightbox.classList.add('active');
-                        // Add a small delay for opacity transition
-                        setTimeout(() => {
-                            lightbox.style.opacity = '1';
-                        }, 50);
+                        currentGallery = [imgUrl];
+                        currentGalleryIndex = 0;
+                        openLightbox();
+                        showLightboxImage(0);
                     }
                 });
             });
+        }
 
-            const closeLightbox = () => {
-                lightbox.style.opacity = '0';
-                setTimeout(() => {
-                    lightbox.classList.remove('active');
-                    lightboxImg.src = '';
-                }, 300);
-            };
-
-            if (closeLightboxBtn) {
-                closeLightboxBtn.addEventListener('click', closeLightbox);
+        // Setup click handler for project galleries using event delegation
+        document.addEventListener('click', (e) => {
+            const trigger = e.target.closest('.project-gallery-trigger');
+            if (trigger) {
+                e.preventDefault();
+                const projectId = parseInt(trigger.getAttribute('data-project-id'), 10);
+                if (typeof PROJECTS_DATA !== 'undefined') {
+                    const project = PROJECTS_DATA.find(p => p.id === projectId);
+                    if (project && project.gallery && project.gallery.length > 0) {
+                        currentGallery = project.gallery;
+                        currentGalleryIndex = 0;
+                        openLightbox();
+                        showLightboxImage(0);
+                    }
+                }
             }
+        });
 
-            lightbox.addEventListener('click', (e) => {
-                if (e.target === lightbox) {
-                    closeLightbox();
-                }
-            });
-
-            // ESC closes lightbox too
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && lightbox.classList.contains('active')) {
-                    closeLightbox();
-                }
+        // Navigation button event listeners
+        if (lightboxPrev) {
+            lightboxPrev.addEventListener('click', (e) => {
+                e.stopPropagation(); // prevent closing lightbox
+                let newIndex = currentGalleryIndex - 1;
+                if (newIndex < 0) newIndex = currentGallery.length - 1; // loop back
+                showLightboxImage(newIndex);
             });
         }
+
+        if (lightboxNext) {
+            lightboxNext.addEventListener('click', (e) => {
+                e.stopPropagation(); // prevent closing lightbox
+                let newIndex = currentGalleryIndex + 1;
+                if (newIndex >= currentGallery.length) newIndex = 0; // loop back
+                showLightboxImage(newIndex);
+            });
+        }
+
+        if (closeLightboxBtn) {
+            closeLightboxBtn.addEventListener('click', closeLightbox);
+        }
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        // Keyboard arrow key navigation & Escape to close
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('active')) return;
+            
+            if (e.key === 'Escape') {
+                closeLightbox();
+            } else if (e.key === 'ArrowRight') {
+                // In Arabic RTL, right arrow key typically moves to previous image
+                let newIndex = currentGalleryIndex - 1;
+                if (newIndex < 0) newIndex = currentGallery.length - 1;
+                showLightboxImage(newIndex);
+            } else if (e.key === 'ArrowLeft') {
+                // In Arabic RTL, left arrow key typically moves to next image
+                let newIndex = currentGalleryIndex + 1;
+                if (newIndex >= currentGallery.length) newIndex = 0;
+                showLightboxImage(newIndex);
+            }
+        });
     }
 
     // Load guestbook and stats on startup
