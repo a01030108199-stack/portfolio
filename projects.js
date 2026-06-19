@@ -64,7 +64,7 @@ const PROJECTS_DATA = [
         category: "excel",
         tags: ["Excel Formulas", "Financial Accounting", "Balance Sheet", "Income Statement"],
         image: "excel_accounting_mockup.png",
-        demoUrl: "assets/excel/company_accounting_system.xlsx",
+        demoUrl: "company_accounting_system.xlsx",
         githubUrl: "https://github.com/AkramSaad"
     },
     {
@@ -74,7 +74,7 @@ const PROJECTS_DATA = [
         category: "excel",
         tags: ["Excel Templates", "Sales Management", "Inventory Control", "Retail Finance"],
         image: "excel_clothing_store_mockup.png",
-        demoUrl: "assets/excel/clothing_store_management.xlsx",
+        demoUrl: "clothing_store_management.xlsx",
         githubUrl: "https://github.com/AkramSaad"
     },
     {
@@ -84,7 +84,7 @@ const PROJECTS_DATA = [
         category: "excel",
         tags: ["Excel VBA", "Macros", "Invoicing System", "Automation"],
         image: "excel_invoice_mockup.png",
-        demoUrl: "assets/excel/smart_sales_invoice.xlsm",
+        demoUrl: "smart_sales_invoice.xlsm",
         githubUrl: "https://github.com/AkramSaad"
     },
     {
@@ -94,7 +94,7 @@ const PROJECTS_DATA = [
         category: "excel",
         tags: ["Inventory Tracking", "Warehouse Control", "Alert Systems", "Excel Sheets"],
         image: "excel_warehouse_mockup.png",
-        demoUrl: "assets/excel/warehouse_inventory_tracker.xlsx",
+        demoUrl: "warehouse_inventory_tracker.xlsx",
         githubUrl: "https://github.com/AkramSaad"
     },
     {
@@ -104,7 +104,7 @@ const PROJECTS_DATA = [
         category: "excel",
         tags: ["Excel Dashboards", "Data Analysis", "Pivot Tables", "Financial Charts"],
         image: "excel_sales_analysis_mockup.png",
-        demoUrl: "assets/excel/sales_analysis_dashboard.xlsm",
+        demoUrl: "sales_analysis_dashboard.xlsm",
         githubUrl: "https://github.com/AkramSaad"
     }
 ];
