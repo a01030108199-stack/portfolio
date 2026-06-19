@@ -20,9 +20,10 @@ const PROJECTS_DATA = [
         demoUrl: "#",
         githubUrl: "https://github.com/AkramSaad",
         gallery: [
-            { src: "project2.jpg", caption: "لوحة التحكم التفاعلية لحوكمة حركة الأقماح المحلية" },
-            { src: "assets/images/project2.png", caption: "تتبع نسب التوريد والتدفقات النقدية بدقة متناهية" },
-            { src: "assets/images/photo_2025-11-20_19-31-15.jpg", caption: "معاينة لوحة تحكم حوكمة صوامع طامية على جهاز الحاسوب" }
+            { src: "project2.jpg", caption: "لوحة التحكم الرئيسية - حوكمة القمح المحلي" },
+            { src: "assets/images/project2_indicators.png", caption: "المؤشرات العامة وتفاصيل نسب النظافة والكميات الموردة" },
+            { src: "assets/images/project2_analysis.png", caption: "التحليل التفصيلي للتدفقات النقدية والتوريد حسب التاريخ والكميات" },
+            { src: "assets/images/project2_deviations.png", caption: "تحليل الانحرافات والتغير اليومي والنمو الشهري للموردين" }
         ]
     },
     {
