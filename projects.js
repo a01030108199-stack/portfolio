@@ -56,5 +56,55 @@ const PROJECTS_DATA = [
         image: "assets/images/project5.png",
         demoUrl: "https://financial-forecaster-c6xcfhcdd2nmyheb6obxip.streamlit.app/",
         githubUrl: "https://github.com/a01030108199-stack/financial-forecaster"
+    },
+    {
+        id: 6,
+        title: "برنامج الحسابات العامة للشركات",
+        description: "برنامج مالي متكامل مصمم بالإكسل لإدارة الحسابات العامة للشركات، يشمل قيود اليومية، ميزان المراجعة، والحسابات الختامية (قائمة الدخل والميزانية العمومية) تلقائياً.",
+        category: "excel",
+        tags: ["Excel Formulas", "Financial Accounting", "Balance Sheet", "Income Statement"],
+        image: "excel_accounting_mockup.png",
+        demoUrl: "assets/excel/company_accounting_system.xlsx",
+        githubUrl: "https://github.com/AkramSaad"
+    },
+    {
+        id: 7,
+        title: "برنامج إدارة مبيعات محلات الملابس",
+        description: "نظام مالي متكامل لتسجيل وإدارة المبيعات والمخازن لمحلات الملابس، مع تتبع حركات الصادر والوارد وحساب الأرباح اليومية والشهرية تلقائياً.",
+        category: "excel",
+        tags: ["Excel Templates", "Sales Management", "Inventory Control", "Retail Finance"],
+        image: "excel_clothing_store_mockup.png",
+        demoUrl: "assets/excel/clothing_store_management.xlsx",
+        githubUrl: "https://github.com/AkramSaad"
+    },
+    {
+        id: 8,
+        title: "نظام فواتير المبيعات الذكي",
+        description: "شيت إكسل تفاعلي مدعوم بماكرو (VBA) لتصميم وإصدار فواتير المبيعات، وحفظ بيانات العملاء وتوليد تقارير المبيعات اليومية بضغطة زر.",
+        category: "excel",
+        tags: ["Excel VBA", "Macros", "Invoicing System", "Automation"],
+        image: "excel_invoice_mockup.png",
+        demoUrl: "assets/excel/smart_sales_invoice.xlsm",
+        githubUrl: "https://github.com/AkramSaad"
+    },
+    {
+        id: 9,
+        title: "شيت إدارة صادر ووارد المخازن",
+        description: "نموذج محاسبي مبسط لمراقبة حركة المخازن (الصادر والوارد)، وتحديد مستويات حد الطلب وتنبيهات نفاد المخزون تلقائياً.",
+        category: "excel",
+        tags: ["Inventory Tracking", "Warehouse Control", "Alert Systems", "Excel Sheets"],
+        image: "excel_warehouse_mockup.png",
+        demoUrl: "assets/excel/warehouse_inventory_tracker.xlsx",
+        githubUrl: "https://github.com/AkramSaad"
+    },
+    {
+        id: 10,
+        title: "لوحة تحكم تحليل البيانات والمبيعات",
+        description: "لوحة تحكم تفاعلية (Dashboard) مصممة بالاكسل لتحليل بيانات المبيعات والأداء المالي التاريخي، مع رسوم بيانية ديناميكية وجداول محورية تفصيلية.",
+        category: "excel",
+        tags: ["Excel Dashboards", "Data Analysis", "Pivot Tables", "Financial Charts"],
+        image: "excel_sales_analysis_mockup.png",
+        demoUrl: "assets/excel/sales_analysis_dashboard.xlsm",
+        githubUrl: "https://github.com/AkramSaad"
     }
 ];

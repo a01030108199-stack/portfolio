@@ -86,9 +86,15 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Check if project has a gallery array
             const isGallery = project.gallery && project.gallery.length > 0;
-            const demoBtnHTML = isGallery 
-                ? `<a href="#" class="btn-icon project-gallery-trigger" data-project-id="${project.id}" title="عرض صور المشروع"><i class="fas fa-images"></i></a>`
-                : `<a href="${project.demoUrl}" target="_blank" class="btn-icon" title="معاينة حية"><i class="fas fa-external-link-alt"></i></a>`;
+            let demoBtnHTML = '';
+            
+            if (isGallery) {
+                demoBtnHTML = `<a href="#" class="btn-icon project-gallery-trigger" data-project-id="${project.id}" title="عرض صور المشروع"><i class="fas fa-images"></i></a>`;
+            } else if (project.category === 'excel') {
+                demoBtnHTML = `<a href="${project.demoUrl}" download class="btn-icon" title="تحميل ملف Excel"><i class="fas fa-file-download"></i></a>`;
+            } else {
+                demoBtnHTML = `<a href="${project.demoUrl}" target="_blank" class="btn-icon" title="معاينة حية"><i class="fas fa-external-link-alt"></i></a>`;
+            }
             
             card.innerHTML = `
                 <div class="project-img-wrapper">
