@@ -30,11 +30,11 @@ const PROJECTS_DATA = [
     {
         id: 3,
         title: "نظام أتمتة التسويات البنكية اليومية",
-        description: "تطوير سكربت برمجية لمطابقة آلاف المعاملات البنكية اليومية مع سجلات الأستاذ العام وتحديد الفروقات تلقائياً، مما قلل وقت التسوية بنسبة 70% وتفادي الأخطاء البشرية.",
+        description: "تطبيق ويب تفاعلي مصمم بـ Streamlit وأداة محاسبية ذكية لربط ومطابقة آلاف معاملات كشف الحساب البنكي مع دفتر الأستاذ العام تلقائياً، وعزل الحركات المعلقة (مثل الشيكات المعلقة والإيداعات بالطريق والعمولات البنكية) وحساب الأرصدة المعدلة بدقة وتوليد مذكرة تسوية البنك الرسمية وتصديرها لملف Excel.",
         category: "python",
-        tags: ["Python", "Automation", "Data Matching", "Financial Auditing"],
+        tags: ["Python", "Streamlit", "Pandas", "Automation", "Financial Reconciliation"],
         image: "assets/images/project3.png",
-        demoUrl: "#",
+        demoUrl: "https://bank-reconciliation-oxe6rmoqs8egask7wnz33k.streamlit.app/",
         githubUrl: "https://github.com/AkramSaad"
     },
     {
