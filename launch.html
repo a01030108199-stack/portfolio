@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جاري تحميل المشروع... | أكرم سعد</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Kufi Arabic', sans-serif;
+            background: #0a0712;
+            color: #f3f1f8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Blobs */
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .blob-1 { width: 400px; height: 400px; background: #8b5cf6; top: -100px; right: -100px; }
+        .blob-2 { width: 350px; height: 350px; background: #06b6d4; bottom: -80px; left: -80px; }
+
+        /* Card */
+        .card {
+            position: relative;
+            z-index: 1;
+            background: rgba(18, 13, 36, 0.8);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 28px;
+            padding: 52px 48px;
+            text-align: center;
+            max-width: 520px;
+            width: 90%;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+        }
+
+        /* Logo / Back link */
+        .back-link {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.85rem;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(18,13,36,0.6);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .back-link:hover { color: white; border-color: rgba(139,92,246,0.5); }
+
+        /* Spinner */
+        .spinner-wrapper {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 32px;
+            position: relative;
+        }
+        .spinner-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            animation: spin 1.4s linear infinite;
+        }
+        .spinner-ring:nth-child(1) {
+            border-top-color: #8b5cf6;
+            animation-duration: 1.4s;
+        }
+        .spinner-ring:nth-child(2) {
+            border-right-color: #06b6d4;
+            animation-duration: 1.8s;
+            animation-direction: reverse;
+            inset: 8px;
+        }
+        .spinner-ring:nth-child(3) {
+            border-bottom-color: #a78bfa;
+            animation-duration: 2.2s;
+            inset: 16px;
+        }
+        .spinner-icon {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            animation: pulse-icon 2s ease-in-out infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse-icon {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.9); }
+        }
+
+        .title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: #9e9aa9;
+            line-height: 1.8;
+            margin-bottom: 32px;
+        }
+
+        /* Progress Bar */
+        .progress-wrapper {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+            border-radius: 3px;
+            transition: width 0.4s ease;
+            box-shadow: 0 0 10px rgba(139,92,246,0.5);
+        }
+
+        .progress-text {
+            font-size: 0.8rem;
+            color: #9e9aa9;
+            margin-bottom: 28px;
+        }
+
+        /* Steps */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            text-align: right;
+            margin-bottom: 32px;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.85rem;
+            color: #9e9aa9;
+            transition: all 0.4s ease;
+        }
+        .step.done {
+            color: #10b981;
+            background: rgba(16,185,129,0.06);
+            border-color: rgba(16,185,129,0.2);
+        }
+        .step.active {
+            color: #a78bfa;
+            background: rgba(139,92,246,0.06);
+            border-color: rgba(139,92,246,0.2);
+        }
+        .step-icon { font-size: 1rem; flex-shrink: 0; }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+            color: white;
+            box-shadow: 0 4px 20px rgba(139,92,246,0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(139,92,246,0.5);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.06);
+            color: #f3f1f8;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Success state */
+        .success-icon {
+            display: none;
+            font-size: 3rem;
+            margin-bottom: 16px;
+            animation: pop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes pop-in {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Sleep alert */
+        .sleep-alert {
+            display: none;
+            background: rgba(251,191,36,0.08);
+            border: 1px solid rgba(251,191,36,0.25);
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: #fbbf24;
+            line-height: 1.7;
+            text-align: right;
+        }
+        .sleep-alert i { margin-left: 6px; }
+
+        /* Iframe hidden */
+        .iframe-checker {
+            position: fixed;
+            left: -9999px;
+            top: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+
+        /* Footer note */
+        .footer-note {
+            margin-top: 24px;
+            font-size: 0.75rem;
+            color: rgba(158,154,169,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <!-- Back button -->
+    <a href="index.html#projects" class="back-link">
+        <i class="fas fa-arrow-right"></i>
+        <span>العودة للمعرض</span>
+    </a>
+
+    <!-- Main Card -->
+    <div class="card">
+
+        <!-- Loading State (default) -->
+        <div id="loading-state">
+            <div class="spinner-wrapper">
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <div class="spinner-icon">🚀</div>
+            </div>
+
+            <h1 class="title" id="project-title">جاري تحميل المشروع...</h1>
+            <p class="subtitle">يتم إيقاظ التطبيق وتجهيزه للعرض<br>قد يستغرق ذلك 10-30 ثانية</p>
+
+            <div class="progress-wrapper">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <p class="progress-text" id="progress-text">0%</p>
+
+            <div class="steps">
+                <div class="step" id="step-1">
+                    <span class="step-icon">⚡</span>
+                    <span>الاتصال بالخادم</span>
+                </div>
+                <div class="step" id="step-2">
+                    <span class="step-icon">🔄</span>
+                    <span>إيقاظ التطبيق من وضع السكون</span>
+                </div>
+                <div class="step" id="step-3">
+                    <span class="step-icon">📊</span>
+                    <span>تحميل البيانات والمكتبات</span>
+                </div>
+                <div class="step" id="step-4">
+                    <span class="step-icon">✅</span>
+                    <span>التطبيق جاهز — جاري الفتح...</span>
+                </div>
+            </div>
+
+            <div class="sleep-alert" id="sleep-alert">
+                <i class="fas fa-moon"></i>
+                <strong>التطبيق في وضع السكون</strong><br>
+                عند فتح الصفحة، اضغط على زر <strong>"Yes, get this app back up!"</strong> ليستيقظ التطبيق. هذا طبيعي في الخطة المجانية.
+            </div>
+
+            <div class="btn-group" id="btn-group" style="display:none;">
+                <a href="#" class="btn btn-primary" id="open-btn" target="_blank">
+                    <i class="fas fa-external-link-alt"></i>
+                    فتح المشروع الآن
+                </a>
+                <a href="index.html#projects" class="btn btn-secondary">
+                    <i class="fas fa-arrow-right"></i>
+                    العودة
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <p class="footer-note">© أكرم سعد — منصة عرض المشاريع المهنية</p>
+
+    <script>
+        // Get URL params
+        const params = new URLSearchParams(window.location.search);
+        const projectUrl = params.get('url') || '';
+        const projectTitle = params.get('title') || 'المشروع';
+
+        // Set title
+        document.getElementById('project-title').textContent = `جاري تحميل: ${decodeURIComponent(projectTitle)}`;
+        document.title = `تحميل ${decodeURIComponent(projectTitle)} | أكرم سعد`;
+
+        // Set open button
+        const openBtn = document.getElementById('open-btn');
+        openBtn.href = projectUrl;
+
+        // Animation sequence
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const steps = [
+            document.getElementById('step-1'),
+            document.getElementById('step-2'),
+            document.getElementById('step-3'),
+            document.getElementById('step-4'),
+        ];
+        const sleepAlert = document.getElementById('sleep-alert');
+        const btnGroup = document.getElementById('btn-group');
+
+        let progress = 0;
+        let currentStep = 0;
+
+        // Animate progress
+        const progressInterval = setInterval(() => {
+            if (progress < 95) {
+                // Slow down near the end
+                const increment = progress < 40 ? 2.5 : progress < 70 ? 1.5 : 0.5;
+                progress = Math.min(progress + increment, 95);
+                progressBar.style.width = progress + '%';
+                progressText.textContent = Math.floor(progress) + '%';
+            }
+        }, 120);
+
+        // Activate steps
+        const stepTimings = [500, 2500, 5000, 9000];
+        stepTimings.forEach((timing, i) => {
+            setTimeout(() => {
+                // Mark previous as done
+                if (i > 0) steps[i - 1].className = 'step done';
+                steps[i].className = 'step active';
+            }, timing);
+        });
+
+        // Show sleep alert after 6 seconds (likely sleeping)
+        setTimeout(() => {
+            sleepAlert.style.display = 'block';
+        }, 6000);
+
+        // After 10 seconds — complete and redirect
+        setTimeout(() => {
+            clearInterval(progressInterval);
+            progress = 100;
+            progressBar.style.width = '100%';
+            progressText.textContent = '100%';
+            steps[3].className = 'step done';
+
+            // Show button + auto redirect
+            btnGroup.style.display = 'flex';
+
+            // Auto open after 1 more second
+            setTimeout(() => {
+                if (projectUrl) {
+                    window.location.href = projectUrl;
+                }
+            }, 1200);
+        }, 10000);
+
+        // If no URL — show error
+        if (!projectUrl) {
+            document.getElementById('project-title').textContent = '❌ لم يتم تحديد رابط المشروع';
+        }
+    </script>
+
+</body>
+</html>

@@ -7,7 +7,7 @@ const PROJECTS_DATA = [
         category: "python",
         tags: ["Python", "Streamlit", "Pandas", "Plotly", "OneDrive API"],
         image: "assets/images/project1.png",
-        demoUrl: "https://tamia-silos-dashboard-hapnbmvswzubaubdbeqef5.streamlit.app/",
+        demoUrl: "launch.html?url=https://tamia-silos-dashboard-hapnbmvswzubaubdbeqef5.streamlit.app/&title=%D9%85%D9%86%D8%B5%D8%A9+%D8%B5%D9%88%D8%A7%D9%85%D8%B9+%D8%B7%D8%A7%D9%85%D9%8A%D8%A9",
         githubUrl: "https://github.com/AkramSaad"
     },
     {
@@ -34,7 +34,7 @@ const PROJECTS_DATA = [
         category: "python",
         tags: ["Python", "Streamlit", "Pandas", "Automation", "Financial Reconciliation"],
         image: "assets/images/project3.png",
-        demoUrl: "https://bank-reconciliation-oxe6rmoqs8egask7wnz33k.streamlit.app/",
+        demoUrl: "launch.html?url=https://bank-reconciliation-oxe6rmoqs8egask7wnz33k.streamlit.app/&title=%D8%A3%D8%AA%D9%85%D8%AA%D8%A9+%D8%A7%D9%84%D8%AA%D8%B3%D9%88%D9%8A%D8%A7%D8%AA+%D8%A7%D9%84%D8%A8%D9%86%D9%83%D9%8A%D8%A9",
         githubUrl: "https://github.com/AkramSaad"
     },
     {
@@ -44,7 +44,7 @@ const PROJECTS_DATA = [
         category: "data",
         tags: ["HTML5", "CSS3", "JavaScript", "PWA", "Financial Dashboards"],
         image: "assets/images/project4.png",
-        demoUrl: "https://akram-contracting.netlify.app",
+        demoUrl: "https://a01030108199-stack.github.io/akram-contracting/",
         githubUrl: "https://github.com/AkramSaad"
     },
     {
@@ -54,7 +54,7 @@ const PROJECTS_DATA = [
         category: "python",
         tags: ["Python", "Streamlit", "Machine Learning", "Linear Regression", "Plotly"],
         image: "assets/images/project5.png",
-        demoUrl: "https://financial-forecaster-c6xcfhcdd2nmyheb6obxip.streamlit.app/",
+        demoUrl: "launch.html?url=https://financial-forecaster-c6xcfhcdd2nmyheb6obxip.streamlit.app/&title=%D9%86%D8%B8%D8%A7%D9%85+%D8%A7%D9%84%D8%AA%D9%86%D8%A8%D8%A4+%D8%A7%D9%84%D9%85%D8%A7%D9%84%D9%8A",
         githubUrl: "https://github.com/a01030108199-stack/financial-forecaster"
     },
     {
