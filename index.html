@@ -88,6 +88,7 @@
                 <a href="#about" class="nav-link">عني</a>
                 <a href="#services" class="nav-link">خدماتي</a>
                 <a href="#projects" class="nav-link">مشاريعي</a>
+                <a href="#videos" class="nav-link">فيديوهاتي</a>
                 <a href="#testimonials" class="nav-link">آراء العملاء</a>
                 <a href="#contact" class="nav-link">تواصل معي</a>
             </nav>
@@ -286,6 +287,131 @@
             </div>
         </div>
     </section>
+
+    <!-- ==================== VIDEOS SECTION ==================== -->
+    <section class="section" id="videos" style="background: linear-gradient(135deg, rgba(139,92,246,0.04) 0%, transparent 60%); padding: 80px 0;">
+      <div class="container">
+        <h2 class="section-title">🎥 فيديوهات شرح البرامج</h2>
+        <p class="section-subtitle-new">شاهد عرضاً حياً للبرامج والأنظمة التي تم تطويرها</p>
+
+        <!-- Videos Grid (loaded from videos.json) -->
+        <div id="videos-grid" style="
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+          gap: 24px;
+          margin-bottom: 30px;
+        "></div>
+
+        <!-- Empty / Loading state -->
+        <div id="videos-empty" style="
+          text-align: center; padding: 50px 20px;
+          color: #94a3b8;
+          flex-direction: column; align-items: center; gap: 14px;
+          display: flex;
+        ">
+          <div style="font-size: 4rem; opacity:0.35;">🎦</div>
+          <div style="font-size: 1rem; font-weight: 600;">جارٍ تحميل الفيديوهات...</div>
+          <div style="font-size: 0.82rem;">إن لم تظهر، تأكد من إضافة الفيديوهات في مجلد <code style="background:rgba(139,92,246,0.1);padding:2px 8px;border-radius:4px;">videos/</code></div>
+        </div>
+
+        <!-- Add video guide box -->
+        <div id="add-video-guide" style="
+          border: 1px dashed rgba(139,92,246,0.4);
+          border-radius: 16px; padding: 24px 28px;
+          background: rgba(139,92,246,0.03);
+          display: none;
+          margin-top: 20px;
+        ">
+          <div style="font-size: 0.9rem; font-weight: 700; color: #8b5cf6; margin-bottom: 12px;">
+            ➕ لإضافة فيديو جديد للمعرض:
+          </div>
+          <ol style="font-size: 0.85rem; color: #64748b; line-height: 2; padding-right: 20px;">
+            <li>انسخ ملف الفيديو إلى مجلد <strong>portfolio/videos/</strong></li>
+            <li>افتح ملف <strong>videos.json</strong> وأضف سطراً جديداً بنفس الشكل</li>
+            <li>ارفع الملفات على GitHub (انظر التعليمات أدناه)</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <style>
+      .vid-card {
+        background: var(--card-bg, #fff);
+        border-radius: 16px; overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+        border: 1px solid rgba(139,92,246,0.15);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .vid-card:hover { transform: translateY(-5px); box-shadow: 0 14px 40px rgba(139,92,246,0.18); }
+      .vid-card video { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; background: #0f0f0f; }
+      .vid-card-body { padding: 16px 18px; }
+      .vid-title { font-size: 0.98rem; font-weight: 700; color: var(--text-primary, #1e293b); margin-bottom: 6px; }
+      .vid-desc  { font-size: 0.8rem; color: #64748b; line-height: 1.6; }
+      .vid-badge {
+        display: inline-block; background: rgba(139,92,246,0.1);
+        color: #8b5cf6; font-size: 0.65rem; font-weight: 700;
+        padding: 2px 10px; border-radius: 50px; margin-top: 8px;
+      }
+      .vid-error {
+        aspect-ratio: 16/9; background: #f1f5f9;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: 8px; color: #94a3b8; font-size: 0.8rem;
+      }
+    </style>
+
+    <script>
+      // ---- LOAD VIDEOS FROM videos.json ----
+      async function loadVideos() {
+        try {
+          const res = await fetch('videos.json?t=' + Date.now());
+          if (!res.ok) throw new Error('not found');
+          const videos = await res.json();
+          const grid = document.getElementById('videos-grid');
+          const empty = document.getElementById('videos-empty');
+          const guide = document.getElementById('add-video-guide');
+
+          if (!videos || videos.length === 0) {
+            empty.querySelector('div:nth-child(2)').textContent = 'لا توجد فيديوهات بعد';
+            guide.style.display = 'block';
+            return;
+          }
+
+          empty.style.display = 'none';
+          grid.innerHTML = '';
+
+          videos.forEach(v => {
+            const card = document.createElement('div');
+            card.className = 'vid-card';
+            card.innerHTML = `
+              <video controls preload="metadata" style="width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#000;"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <source src="${v.file}" type="video/mp4">
+                متصفحك لا يدعم تشغيل الفيديو
+              </video>
+              <div class="vid-error" style="display:none;">
+                <span style="font-size:2rem;">📹</span>
+                <span>الفيديو غير متاح بعد</span>
+              </div>
+              <div class="vid-card-body">
+                <div class="vid-title">${v.title || 'فيديو شرح'}</div>
+                ${v.description ? `<div class="vid-desc">${v.description}</div>` : ''}
+                <span class="vid-badge">📹 ${v.badge || 'شرح برنامج'}</span>
+              </div>
+            `;
+            grid.appendChild(card);
+          });
+
+          guide.style.display = 'block';
+        } catch(e) {
+          const empty = document.getElementById('videos-empty');
+          empty.querySelector('div:nth-child(2)').textContent = 'أضف فيديوهاتك في مجلد videos/';
+          document.getElementById('add-video-guide').style.display = 'block';
+        }
+      }
+      loadVideos();
+    </script>
+
 
     <!-- ==================== SERVICES SECTION ==================== -->
     <section class="section services-section-new" id="services">
