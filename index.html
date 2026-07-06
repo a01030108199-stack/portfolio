@@ -82,23 +82,10 @@
                 <span class="logo-text">أكرم سعد</span>
             </div>
 
-            <!-- Navigation Links -->
-            <nav class="nav-menu" id="nav-menu">
-                <a href="#hero" class="nav-link active">الرئيسية</a>
-                <a href="#about" class="nav-link">عني</a>
-                <a href="#services" class="nav-link">خدماتي</a>
-                <a href="#projects" class="nav-link">مشاريعي</a>
-                <a href="#videos" class="nav-link">فيديوهاتي</a>
-                <a href="#testimonials" class="nav-link">آراء العملاء</a>
-                <a href="#contact" class="nav-link">تواصل معي</a>
-            </nav>
+            <!-- Navigation Links (Moved to Hero Section) -->
 
             <!-- Action buttons -->
             <div class="nav-actions">
-                <!-- Theme Toggle Button -->
-                <button class="btn-icon" id="theme-toggle" title="تغيير الوضع">
-                    <i class="fas fa-moon"></i>
-                </button>
                 <!-- Download CV -->
                 <a href="assets/cv_akram.pdf" target="_blank" class="btn btn-primary" id="cv-download-btn">
                     <i class="fas fa-download"></i>
@@ -137,6 +124,21 @@
                 <h1 class="hero-title">أنا <span>أكرم سعد</span><br>محاسب أول ومحلل بيانات مالية</h1>
                 <h2 class="hero-subtitle">أقوم بدمج العلوم المحاسبية بأدوات تحليل البيانات الحديثة وأتمتة العمليات المالية.</h2>
                 <p class="hero-desc">باحث دكتوراه وماجستير في المحاسبة والمراجعة. متخصص في تطوير لوحات تحكم تفاعلية (Dashboards) لربط وتتبع مؤشرات الأداء المالي، وأتمتة المطابقات والتسويات البنكية باستخدام Power BI، SQL، و Python لدعم الإدارة العليا في اتخاذ القرارات الاستراتيجية.</p>
+                
+                <!-- Navigation Links and Theme Toggle (Moved from Header) -->
+                <nav class="nav-menu" id="nav-menu" style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 25px; align-items: center; background: rgba(139, 92, 246, 0.05); padding: 12px 20px; border-radius: 15px; border: 1px solid rgba(139, 92, 246, 0.1);">
+                    <a href="#hero" class="nav-link active" style="color: var(--text-primary); font-weight: 600;">الرئيسية</a>
+                    <a href="#about" class="nav-link" style="color: var(--text-secondary); font-weight: 500;">عني</a>
+                    <a href="#services" class="nav-link" style="color: var(--text-secondary); font-weight: 500;">خدماتي</a>
+                    <a href="#projects" class="nav-link" style="color: var(--text-secondary); font-weight: 500;">مشاريعي</a>
+                    <a href="#videos" class="nav-link" style="color: var(--text-secondary); font-weight: 500;">فيديوهاتي</a>
+                    <a href="#testimonials" class="nav-link" style="color: var(--text-secondary); font-weight: 500;">آراء العملاء</a>
+                    <a href="#contact" class="nav-link" style="color: var(--text-secondary); font-weight: 500;">تواصل معي</a>
+                    <div style="flex-grow: 1;"></div>
+                    <button class="btn-icon" id="theme-toggle" title="تغيير الوضع" style="background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; cursor: pointer; color: var(--text-primary);">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </nav>
                 <div class="hero-buttons">
                     <a href="#projects" class="btn btn-primary">
                         <span>استعراض مشاريعي</span>
