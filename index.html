@@ -149,10 +149,23 @@
             </div>
 
             <!-- Left / Visual Content -->
-            <div class="hero-visual reveal">
+            <div class="hero-visual reveal" style="display: flex; flex-direction: column; align-items: center; gap: 25px;">
                 <div class="avatar-wrapper">
                     <img src="assets/images/avatar.png" alt="أكرم سعد" class="avatar-img" onerror="this.src='https://placehold.co/400x400/120d24/ffffff?text=%D8%A3%D9%83%D8%B1%D9%85+%D8%B3%D8%B9%D8%AF'">
                 </div>
+                
+                <!-- أزرار السيرة الذاتية والشهادات الجديدة بجوار الصورة -->
+                <div class="hero-profile-actions" style="display: flex; gap: 12px; justify-content: center; z-index: 10; position: relative;">
+                    <a href="assets/cv_akram.pdf" target="_blank" class="btn btn-primary" style="padding: 12px 24px; border-radius: 12px; font-weight: bold; display: flex; align-items: center; gap: 10px; background: linear-gradient(135deg, #8b5cf6, #3b82f6); box-shadow: 0 8px 25px rgba(139, 92, 246, 0.35); border: none; font-size: 15px;">
+                        <i class="fas fa-download"></i>
+                        <span>السيرة الذاتية</span>
+                    </a>
+                    <button class="btn btn-secondary" onclick="document.getElementById('certificates-btn').click()" style="padding: 12px 24px; border-radius: 12px; font-weight: bold; display: flex; align-items: center; gap: 10px; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.4); color: #fff; font-size: 15px; transition: all 0.3s;">
+                        <i class="fas fa-award"></i>
+                        <span>الشهادات</span>
+                    </button>
+                </div>
+
                 <!-- Interactive floating background shapes -->
                 <div class="hero-shapes">
                     <div class="shape shape-1"></div>
