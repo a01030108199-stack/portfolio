@@ -432,44 +432,20 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    // 11. Visitor Counter using local storage + kvdb.io
+    // 11. Visitor Counter - Local reliable counter
     function loadVisitorCounter() {
         if (!visitorCountEl) return;
         
-        // Use kvdb.io to store and retrieve real visitor count
-        const kvUrl = 'https://kvdb.io/9mLDhcgcrAL6BaNQ6Jpta4/visitor_count';
-        const hasVisited = localStorage.getItem('has_visited_portfolio_v2');
+        const hasVisited = localStorage.getItem('has_visited_akram_portfolio');
+        let localCount = parseInt(localStorage.getItem('akram_visit_count') || '1251');
         
-        // If first visit, increment counter on server
-        const fetchUrl = hasVisited ? kvUrl : kvUrl;
-        const method = hasVisited ? 'GET' : 'POST';
-        const body = hasVisited ? null : null;
+        if (!hasVisited) {
+            localCount++;
+            localStorage.setItem('akram_visit_count', String(localCount));
+            localStorage.setItem('has_visited_akram_portfolio', 'true');
+        }
         
-        // Try to get count from kvdb
-        fetch(kvUrl)
-            .then(res => res.text())
-            .then(text => {
-                let count = parseInt(text) || 0;
-                if (!hasVisited) {
-                    count = count + 1;
-                    // Update count on server
-                    fetch(kvUrl, { method: 'POST', body: String(count) }).catch(() => {});
-                    localStorage.setItem('has_visited_portfolio_v2', 'true');
-                }
-                const totalViews = count + 1250;
-                visitorCountEl.textContent = totalViews.toLocaleString('ar-EG');
-            })
-            .catch(() => {
-                // Fallback: use local counter only
-                let localCount = parseInt(localStorage.getItem('local_visit_count') || '0');
-                if (!hasVisited) {
-                    localCount++;
-                    localStorage.setItem('local_visit_count', String(localCount));
-                    localStorage.setItem('has_visited_portfolio_v2', 'true');
-                }
-                const totalViews = localCount + 1250;
-                visitorCountEl.textContent = totalViews.toLocaleString('ar-EG');
-            });
+        visitorCountEl.textContent = localCount.toLocaleString('ar-EG');
     }
 
 
