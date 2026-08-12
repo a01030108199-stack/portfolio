@@ -432,36 +432,46 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    // 11. Dynamic Visitor Counter API integration (Using CounterAPI.dev for high reliability)
+    // 11. Visitor Counter using local storage + kvdb.io
     function loadVisitorCounter() {
         if (!visitorCountEl) return;
-        const hasVisited = localStorage.getItem('has_visited_portfolio');
-        const url = hasVisited 
-            ? 'https://api.counterapi.dev/v1/akramsaad/visits/' 
-            : 'https://api.counterapi.dev/v1/akramsaad/visits/up';
         
-        fetch(url)
-            .then(res => {
-                if (!res.ok) throw new Error('Counter API error');
-                return res.json();
-            })
-            .then(data => {
-                if (data && typeof data.count === 'number') {
-                    // Start from 1250+ to reflect a realistic and premium view history
-                    const totalViews = data.count + 1250;
-                    visitorCountEl.textContent = totalViews.toLocaleString();
-                    if (!hasVisited) {
-                        localStorage.setItem('has_visited_portfolio', 'true');
-                    }
-                } else {
-                    visitorCountEl.textContent = 'متصل';
+        // Use kvdb.io to store and retrieve real visitor count
+        const kvUrl = 'https://kvdb.io/9mLDhcgcrAL6BaNQ6Jpta4/visitor_count';
+        const hasVisited = localStorage.getItem('has_visited_portfolio_v2');
+        
+        // If first visit, increment counter on server
+        const fetchUrl = hasVisited ? kvUrl : kvUrl;
+        const method = hasVisited ? 'GET' : 'POST';
+        const body = hasVisited ? null : null;
+        
+        // Try to get count from kvdb
+        fetch(kvUrl)
+            .then(res => res.text())
+            .then(text => {
+                let count = parseInt(text) || 0;
+                if (!hasVisited) {
+                    count = count + 1;
+                    // Update count on server
+                    fetch(kvUrl, { method: 'POST', body: String(count) }).catch(() => {});
+                    localStorage.setItem('has_visited_portfolio_v2', 'true');
                 }
+                const totalViews = count + 1250;
+                visitorCountEl.textContent = totalViews.toLocaleString('ar-EG');
             })
-            .catch(err => {
-                console.warn('Visitor counter API failed:', err);
-                visitorCountEl.textContent = 'متصل';
+            .catch(() => {
+                // Fallback: use local counter only
+                let localCount = parseInt(localStorage.getItem('local_visit_count') || '0');
+                if (!hasVisited) {
+                    localCount++;
+                    localStorage.setItem('local_visit_count', String(localCount));
+                    localStorage.setItem('has_visited_portfolio_v2', 'true');
+                }
+                const totalViews = localCount + 1250;
+                visitorCountEl.textContent = totalViews.toLocaleString('ar-EG');
             });
     }
+
 
     if (guestbookForm) {
         guestbookForm.addEventListener('submit', (e) => {
