@@ -399,7 +399,7 @@
             const card = document.createElement('div');
             card.className = 'vid-card';
             card.innerHTML = `
-              <video controls preload="metadata" style="width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#000;"
+              <video controls preload="none" style="width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#000;"
                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <source src="${v.file}" type="video/mp4">
                 متصفحك لا يدعم تشغيل الفيديو
