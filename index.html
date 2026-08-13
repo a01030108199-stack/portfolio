@@ -49,13 +49,13 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="أكرم سعد | محاسب أول ومحلل بيانات مالية">
     <meta property="og:description" content="دمج المحاسبة والرقابة المالية بأدوات تحليل البيانات الذكية لتقديم لوحات تحكم تفاعلية ودعم القرار الاستراتيجي.">
-    <meta property="og:image" content="assets/images/portfolio_preview.png">
+    <meta property="og:image" content="assets/images/portfolio_preview.jpg">
 
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Custom Style Sheet -->
-    <link rel="stylesheet" href="styles.css?v=200?v=13">
+    <link rel="stylesheet" href="styles.css?v=300?v=13">
 </head>
 <body>
 
@@ -296,58 +296,13 @@
                 <button class="filter-btn" data-filter="excel">جداول وبرامج (Excel)</button>
             </div>
 
-            <!-- Projects Grid (Loaded dynamically from projects.js?v=200) -->
+            <!-- Projects Grid (Loaded dynamically from projects.js?v=300) -->
             <div class="projects-grid" id="projects-grid">
                 <!-- Projects will be generated here by Javascript -->
             </div>
         </div>
     </section>
 
-    <!-- ==================== VIDEOS SECTION ==================== -->
-    <section class="section" id="videos" style="background: linear-gradient(135deg, rgba(139,92,246,0.04) 0%, transparent 60%); padding: 80px 0;">
-      <div class="container">
-        <h2 class="section-title">🎥 فيديوهات شرح البرامج</h2>
-        <p class="section-subtitle-new">شاهد عرضاً حياً للبرامج والأنظمة التي تم تطويرها</p>
-
-        <!-- Videos Grid (loaded from videos.json) -->
-        <div id="videos-grid" style="
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-          gap: 24px;
-          margin-bottom: 30px;
-        "></div>
-
-        <!-- Empty / Loading state -->
-        <div id="videos-empty" style="
-          text-align: center; padding: 50px 20px;
-          color: #94a3b8;
-          flex-direction: column; align-items: center; gap: 14px;
-          display: flex;
-        ">
-          <div style="font-size: 4rem; opacity:0.35;">🎦</div>
-          <div style="font-size: 1rem; font-weight: 600;">جارٍ تحميل الفيديوهات...</div>
-          <div style="font-size: 0.82rem;">إن لم تظهر، تأكد من إضافة الفيديوهات في مجلد <code style="background:rgba(139,92,246,0.1);padding:2px 8px;border-radius:4px;">videos/</code></div>
-        </div>
-
-        <!-- Add video guide box -->
-        <div id="add-video-guide" style="
-          border: 1px dashed rgba(139,92,246,0.4);
-          border-radius: 16px; padding: 24px 28px;
-          background: rgba(139,92,246,0.03);
-          display: none;
-          margin-top: 20px;
-        ">
-          <div style="font-size: 0.9rem; font-weight: 700; color: #8b5cf6; margin-bottom: 12px;">
-            ➕ لإضافة فيديو جديد للمعرض:
-          </div>
-          <ol style="font-size: 0.85rem; color: #64748b; line-height: 2; padding-right: 20px;">
-            <li>انسخ ملف الفيديو إلى مجلد <strong>portfolio/videos/</strong></li>
-            <li>افتح ملف <strong>videos.json</strong> وأضف سطراً جديداً بنفس الشكل</li>
-            <li>ارفع الملفات على GitHub (انظر التعليمات أدناه)</li>
-          </ol>
-        </div>
-      </div>
-    </section>
 
     <style>
       .vid-card {
@@ -861,7 +816,7 @@
     </button>
 
     <!-- Scripts -->
-    <script src="projects.js?v=200?v=15"></script>
-    <script src="script.js?v=200?v=15"></script>
+    <script src="projects.js?v=300?v=15"></script>
+    <script src="script.js?v=300?v=15"></script>
 </body>
 </html>
