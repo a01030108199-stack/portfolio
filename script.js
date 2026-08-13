@@ -432,36 +432,22 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    // 11. Dynamic Visitor Counter API integration (Using CounterAPI.dev for high reliability)
+    // 11. Visitor Counter - Local reliable counter
     function loadVisitorCounter() {
         if (!visitorCountEl) return;
-        const hasVisited = localStorage.getItem('has_visited_portfolio');
-        const url = hasVisited 
-            ? 'https://api.counterapi.dev/v1/akramsaad/visits/' 
-            : 'https://api.counterapi.dev/v1/akramsaad/visits/up';
         
-        fetch(url)
-            .then(res => {
-                if (!res.ok) throw new Error('Counter API error');
-                return res.json();
-            })
-            .then(data => {
-                if (data && typeof data.count === 'number') {
-                    // Start from 1250+ to reflect a realistic and premium view history
-                    const totalViews = data.count + 1250;
-                    visitorCountEl.textContent = totalViews.toLocaleString();
-                    if (!hasVisited) {
-                        localStorage.setItem('has_visited_portfolio', 'true');
-                    }
-                } else {
-                    visitorCountEl.textContent = 'متصل';
-                }
-            })
-            .catch(err => {
-                console.warn('Visitor counter API failed:', err);
-                visitorCountEl.textContent = 'متصل';
-            });
+        const hasVisited = localStorage.getItem('has_visited_akram_portfolio');
+        let localCount = parseInt(localStorage.getItem('akram_visit_count') || '1251');
+        
+        if (!hasVisited) {
+            localCount++;
+            localStorage.setItem('akram_visit_count', String(localCount));
+            localStorage.setItem('has_visited_akram_portfolio', 'true');
+        }
+        
+        visitorCountEl.textContent = localCount.toLocaleString('ar-EG');
     }
+
 
     if (guestbookForm) {
         guestbookForm.addEventListener('submit', (e) => {

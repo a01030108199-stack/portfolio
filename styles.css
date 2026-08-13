@@ -3,7 +3,32 @@
    Design Language: Glassmorphism, Dark/Light Mode, Vibrant Gradients, Smooth Transitions
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Noto+Kufi+Arabic:wght@300;400;500;600;700;800&display=swap');
+/* Local Fonts - No external requests needed */
+@font-face {
+    font-family: 'Montserrat';
+    src: url('assets/fonts/montserrat-400.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Montserrat';
+    src: url('assets/fonts/montserrat-600.woff2') format('woff2');
+    font-weight: 600 700;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Noto Kufi Arabic';
+    src: url('assets/fonts/notokufi-400.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Noto Kufi Arabic';
+    src: url('assets/fonts/notokufi-700.woff2') format('woff2');
+    font-weight: 700 800;
+    font-display: swap;
+}
+
 
 
 :root {
