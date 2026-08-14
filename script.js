@@ -1,4 +1,4 @@
-/* 
+﻿/* 
    Akram Saad Portfolio - Interactive Script
    Includes: Project Filtering, Dark/Light Mode, Mobile Menu, Scroll Reveal, Form Submission
 */
@@ -265,7 +265,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const welcomeText = document.getElementById('welcome-text');
 
     if (welcomeBanner && welcomeFlag && welcomeText) {
-        // Show simple welcome without external API call
         welcomeBanner.style.display = 'inline-flex';
     }
 
@@ -379,26 +378,60 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function loadGuestbook() {
-        // Load from local storage + default comments only (no external fetch)
-        const localComments = getLocalComments();
-        const mergedComments = [...localComments];
-        defaultComments.forEach(serverComment => {
-            const exists = mergedComments.some(local =>
-                local.name === serverComment.name &&
-                local.message === serverComment.message
-            );
-            if (!exists) {
-                mergedComments.push(serverComment);
-            }
-        });
-        renderGuestbook(mergedComments.slice(0, 15));
+        fetch(dbUrl)
+            .then(res => {
+                if (!res.ok) {
+                    if (res.status === 404) {
+                        return { comments: defaultComments };
+                    }
+                    throw new Error('Failed to fetch DB');
+                }
+                return res.json();
+            })
+            .then(resData => {
+                let comments = defaultComments;
+                if (resData && Array.isArray(resData.comments)) {
+                    comments = resData.comments;
+                }
+                const localComments = getLocalComments();
+                const mergedComments = [...localComments];
+                
+                comments.forEach(serverComment => {
+                    const exists = mergedComments.some(local => 
+                        local.name === serverComment.name && 
+                        local.message === serverComment.message
+                    );
+                    if (!exists) {
+                        mergedComments.push(serverComment);
+                    }
+                });
+                
+                renderGuestbook(mergedComments.slice(0, 15));
+            })
+            .catch(err => {
+                console.warn('Error loading guestbook from DB, falling back to local/default:', err);
+                const localComments = getLocalComments();
+                const mergedComments = [...localComments, ...defaultComments];
+                renderGuestbook(mergedComments.slice(0, 15));
+            });
     }
 
-    // 11. Dynamic Visitor Counter API integration (Using CounterAPI.dev for high reliability)
+    // 11. Visitor Counter - Local reliable counter
     function loadVisitorCounter() {
         if (!visitorCountEl) return;
-        visitorCountEl.textContent = '1,250';
+        
+        const hasVisited = localStorage.getItem('has_visited_akram_portfolio');
+        let localCount = parseInt(localStorage.getItem('akram_visit_count') || '1251');
+        
+        if (!hasVisited) {
+            localCount++;
+            localStorage.setItem('akram_visit_count', String(localCount));
+            localStorage.setItem('has_visited_akram_portfolio', 'true');
+        }
+        
+        visitorCountEl.textContent = localCount.toLocaleString('ar-EG');
     }
+
 
     if (guestbookForm) {
         guestbookForm.addEventListener('submit', (e) => {
@@ -723,5 +756,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
-
 
