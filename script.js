@@ -1,4 +1,4 @@
-﻿/* 
+/* 
    Akram Saad Portfolio - Interactive Script
    Includes: Project Filtering, Dark/Light Mode, Mobile Menu, Scroll Reveal, Form Submission
 */
@@ -265,23 +265,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const welcomeText = document.getElementById('welcome-text');
 
     if (welcomeBanner && welcomeFlag && welcomeText) {
-        // Fetch country info from ipapi.co (free and fast JSON geolocation API)
-        fetch('https://ipapi.co/json/')
-            .then(res => res.json())
-            .then(data => {
-                if (data && data.country_code && data.country_name) {
-                    const countryCode = data.country_code.toLowerCase();
-                    const countryArabicName = getCountryArabic(data.country_code) || data.country_name;
-                    // استخدام صورة علم عالية الجودة بدلاً من إيموجي اليونيكود لحل مشكلة عدم ظهوره في ويندوز
-                    welcomeFlag.innerHTML = `<img src="https://flagcdn.com/w20/${countryCode}.png" style="width: 20px; height: auto; border-radius: 3px; vertical-align: middle; display: inline-block; box-shadow: 0 1px 3px rgba(0,0,0,0.2);" alt="${data.country_name}">`;
-                    welcomeText.innerHTML = `أهلاً بك! نسعد بزيارتك الكريمة من <strong>${countryArabicName}</strong> 💖`;
-                    welcomeBanner.style.display = 'inline-flex';
-                }
-            })
-            .catch(err => {
-                console.warn('Geolocation failed, showing default greeting:', err);
-                welcomeBanner.style.display = 'inline-flex'; // show generic welcome anyway
-            });
+        // Show simple welcome without external API call
+        welcomeBanner.style.display = 'inline-flex';
     }
 
     // Helper: ISO Country Code to Flag Emoji
@@ -394,52 +379,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function loadGuestbook() {
-        fetch(dbUrl)
-            .then(res => {
-                if (!res.ok) {
-                    if (res.status === 404) {
-                        return { comments: defaultComments };
-                    }
-                    throw new Error('Failed to fetch DB');
-                }
-                return res.json();
-            })
-            .then(resData => {
-                let comments = defaultComments;
-                if (resData && Array.isArray(resData.comments)) {
-                    comments = resData.comments;
-                }
-                const localComments = getLocalComments();
-                const mergedComments = [...localComments];
-                
-                comments.forEach(serverComment => {
-                    const exists = mergedComments.some(local => 
-                        local.name === serverComment.name && 
-                        local.message === serverComment.message
-                    );
-                    if (!exists) {
-                        mergedComments.push(serverComment);
-                    }
-                });
-                
-                renderGuestbook(mergedComments.slice(0, 15));
-            })
-            .catch(err => {
-                console.warn('Error loading guestbook from DB, falling back to local/default:', err);
-                const localComments = getLocalComments();
-                const mergedComments = [...localComments, ...defaultComments];
-                renderGuestbook(mergedComments.slice(0, 15));
-            });
+        // Load from local storage + default comments only (no external fetch)
+        const localComments = getLocalComments();
+        const mergedComments = [...localComments];
+        defaultComments.forEach(serverComment => {
+            const exists = mergedComments.some(local =>
+                local.name === serverComment.name &&
+                local.message === serverComment.message
+            );
+            if (!exists) {
+                mergedComments.push(serverComment);
+            }
+        });
+        renderGuestbook(mergedComments.slice(0, 15));
     }
 
     // 11. Dynamic Visitor Counter API integration (Using CounterAPI.dev for high reliability)
     function loadVisitorCounter() {
         if (!visitorCountEl) return;
-        const hasVisited = localStorage.getItem('has_visited_portfolio');
-        const url = hasVisited 
-            ? 'https://api.counterapi.dev/v1/akramsaad/visits/' 
-            : 'https://api.counterapi.dev/v1/akramsaad/visits/up';
-        
         visitorCountEl.textContent = '1,250';
     }
 
