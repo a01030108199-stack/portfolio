@@ -1,4 +1,4 @@
-/* 
+﻿/* 
    Akram Saad Portfolio - Interactive Script
    Includes: Project Filtering, Dark/Light Mode, Mobile Menu, Scroll Reveal, Form Submission
 */
@@ -440,27 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ? 'https://api.counterapi.dev/v1/akramsaad/visits/' 
             : 'https://api.counterapi.dev/v1/akramsaad/visits/up';
         
-        fetch(url)
-            .then(res => {
-                if (!res.ok) throw new Error('Counter API error');
-                return res.json();
-            })
-            .then(data => {
-                if (data && typeof data.count === 'number') {
-                    // Start from 1250+ to reflect a realistic and premium view history
-                    const totalViews = data.count + 1250;
-                    visitorCountEl.textContent = totalViews.toLocaleString();
-                    if (!hasVisited) {
-                        localStorage.setItem('has_visited_portfolio', 'true');
-                    }
-                } else {
-                    visitorCountEl.textContent = 'متصل';
-                }
-            })
-            .catch(err => {
-                console.warn('Visitor counter API failed:', err);
-                visitorCountEl.textContent = 'متصل';
-            });
+        visitorCountEl.textContent = '1,250';
     }
 
     if (guestbookForm) {
@@ -786,4 +766,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
+
 
